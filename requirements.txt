@@ -1,0 +1,5 @@
+pytz==2022.1
+python-dotenv==0.20.0
+Scrapy==2.6.1
+Scrapy-UserAgents==0.0.1
+slack-sdk==3.16.1
