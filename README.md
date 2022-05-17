@@ -22,7 +22,7 @@ pip install python-dotenv
 pip install pytz
 pip install scrapy
 pip install scrapy-useragents
-pip install slack_sd
+pip install slack_sdk
 ```
 
 ### Once libraries are installed go to target Spider file
