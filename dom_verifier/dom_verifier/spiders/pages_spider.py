@@ -18,7 +18,7 @@ class PagesSpider(scrapy.Spider):
         'http://uclacn.local',
         'http://magogallery.local',
 
-        ## For PRODUCTION
+        # For PRODUCTION
         # 'https://hylinkdore.com/',
         # 'https://hylinkgroup.com/',
         # 'https://hylinktravel.com/',
@@ -89,13 +89,20 @@ class PagesSpider(scrapy.Spider):
             item['gt_src'] = 'N/A'
             item['gt_code'] = 'N/A'
         else:
-            # Check for Pixel
             sel = Selector(response)
+            # check if script contains code with 'gtm.js'
             xpath_query = '//script[contains(., "googletagmanager.com/gtm.js")]'
-            gt_src_sel = sel.xpath(xpath_query)
+            gt_src_sel_gtm = sel.xpath(xpath_query)
             print("google tag code")
-            print(gt_src_sel)
-            if not gt_src_sel:
+            print(gt_src_sel_gtm)
+
+            # if not, do another check if it contains 'dataLayer.push'
+            xpath_query = '//script[contains(., "dataLayer")]'
+            gt_src_sel_dl = sel.xpath(xpath_query)
+            print("google tag code - dataLayer")
+            print(gt_src_sel_dl)
+
+            if not gt_src_sel_gtm and not gt_src_sel_dl:
                 item['gt_code'] = '0'
             else:
                 item['gt_code'] = '1'
