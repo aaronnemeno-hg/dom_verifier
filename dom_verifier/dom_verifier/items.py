@@ -13,3 +13,5 @@ class PageItem(scrapy.Item):
     status_code = scrapy.Field()
     gt_src = scrapy.Field()
     gt_code = scrapy.Field()
+    pixel_src = scrapy.Field()
+    pixel_code = scrapy.Field()
