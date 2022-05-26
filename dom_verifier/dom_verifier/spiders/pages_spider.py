@@ -69,6 +69,9 @@ class PagesSpider(scrapy.Spider):
         # 'http://wasabi.elcapps.com/appvacationhomepage_haikou',
         # 'http://replenishment.elcapps.com/',
         # 'https://lamer-dxb.com/'
+        # 'http://jmllnycampaign.elcapps.com/',
+        # 'http://elsupremepost.elcapps.com/index.html',
+        # 'http://tfsatinmattereplenishment.elcapps.com/',
  ]
 
     def parse(self, response):
@@ -88,6 +91,8 @@ class PagesSpider(scrapy.Spider):
             print("Response status not 200. Stopping process.")
             item['gt_src'] = 'N/A'
             item['gt_code'] = 'N/A'
+            item['pixel_src'] = 'N/A'
+            item['pixel_code'] = 'N/A'
         else:
             sel = Selector(response)
             # check if script contains code with 'gtm.js'
@@ -115,5 +120,26 @@ class PagesSpider(scrapy.Spider):
                 item['gt_src'] = '0'
             else:
                 item['gt_src'] = '1'
+
+           # check if script contains code with 'gtm.js'
+            xpath_query = '//script[contains(@src, "up_loader.1.1.0.js")]'
+            pixel_src_sel = sel.xpath(xpath_query)
+            print("pixel tag src")
+            print(pixel_src_sel)
+            if not pixel_src_sel:
+                item['pixel_src'] = '0'
+            else:
+                item['pixel_src'] = '1'
+
+            # if not, do another check if it contains 'dataLayer.push'
+            xpath_query = '//script[contains(., "universalPixelApi.init")]'
+            pixel_code_sel = sel.xpath(xpath_query)
+            print("pixel tag code - universalPixelApi.init")
+            print(pixel_code_sel)
+            if not pixel_code_sel:
+                item['pixel_code'] = '0'
+            else:
+                item['pixel_code'] = '1'
+
         yield item
 
